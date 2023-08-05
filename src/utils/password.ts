@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 
 // Function to generate a hash of the password using bcryptjs
-export const hashPassword = async (password: string): Promise<string> => {
+export const hashPassword = async (password: string): Promise<string | Error> => {
   // Generate a salt to hash the password
   const saltRounds = 15;
 
@@ -11,7 +11,7 @@ export const hashPassword = async (password: string): Promise<string> => {
     return hashedPassword;
   } catch (error) {
     // Handle any errors
-    throw new Error("Password hashing failed");
+    return new Error("Password hashing failed");
   }
 };
 

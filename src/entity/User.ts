@@ -31,9 +31,6 @@ export class User {
   @CreateDateColumn()
   createdAt: Date;
 
-  @Column()
-  token: string;
-
   @Column({
     type: "enum",
     default: "user",

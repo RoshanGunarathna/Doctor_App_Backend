@@ -2,20 +2,19 @@ import { AppDataSource } from "../data-source";
 import { User as UserEntity } from "../entity/User";
 import { User, UserInput } from "../types/types";
 import { QueryFailedError } from "typeorm";
+import bcrypt from "bcryptjs";
 
-export const addUser = async (userData: UserInput, token: string) => {
+export const addUser = async (userData: UserInput) => {
   try {
     const user = new UserEntity();
     user.name = userData.name;
     user.phoneNumber = userData.phoneNumber;
     user.password = userData.password;
     user.nic = userData.nic;
-    user.token = token;
 
     const userRepository = AppDataSource.getRepository(UserEntity);
 
     await userRepository.save(user);
-    console.log("User added successfully!");
     return true;
   } catch (error: any) {
     // Check if the error is a QueryFailedError (constraint violation)
@@ -61,4 +60,15 @@ export const checkIfUserExists = async (
     });
     return !!existingUser;
   }
+};
+
+export const comparePassword = async (
+  nic: string,
+  password: string
+): Promise<boolean> => {
+  const userRepository = AppDataSource.getRepository(UserEntity);
+
+  const user = await userRepository.findOne({ where: { nic: nic } });
+
+  return await bcrypt.compare(password, user.password);
 };

@@ -8,5 +8,6 @@ declare namespace NodeJS {
     MYSQL_PORT: number;
     JWT_SECRET: string;
     JWT_EXPIRES_TIME: string;
+    COOKIE_EXPIRES_TIME: number;
   }
 }
