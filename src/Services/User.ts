@@ -72,3 +72,9 @@ export const comparePassword = async (
 
   return await bcrypt.compare(password, user.password);
 };
+
+export const getUserDetails = async (nic: string): Promise<UserEntity> => {
+  const userRepository = AppDataSource.getRepository(UserEntity);
+
+  return await userRepository.findOne({ where: { nic: nic } });
+};
