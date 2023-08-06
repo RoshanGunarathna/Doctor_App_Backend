@@ -7,10 +7,13 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  getUser,
 } from "../controllers/authController";
 
 router.route("/register").post(isLoggedUser, registerUser);
 router.route("/login").post(isLoggedUser, loginUser);
+
+router.route("/me").get(isAuthenticatedUser, getUser);
 
 router.route("/logout").get(isAuthenticatedUser, logoutUser);
 

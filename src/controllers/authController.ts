@@ -108,3 +108,12 @@ export const logoutUser = catchAsyncErrors(
     });
   }
 );
+
+export const getUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).json({
+      success: true,
+      user: req.body.user,
+    });
+  }
+);
