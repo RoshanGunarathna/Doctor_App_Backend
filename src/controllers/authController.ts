@@ -3,7 +3,12 @@ import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/errorHandler";
 import catchAsyncErrors from "../middleware/catchAsyncErrors";
 
-import { addUser, checkIfUserExists, comparePassword } from "../Services/User";
+import {
+  addUser,
+  checkIfUserExists,
+  comparePassword,
+  getUserDetails,
+} from "../Services/User";
 import { hashPassword, validatePassword } from "../utils/password";
 import { generateJwt } from "../utils/tokens";
 import sendToken from "../utils/sendToken";
@@ -54,7 +59,9 @@ export const registerUser = catchAsyncErrors(
     });
 
     if (result === true) {
-      sendToken(generateJwt(nic), 200, res);
+      res.status(200).json({
+        success: true,
+      });
     } else {
       return next(new ErrorHandler(result, 500));
     }
@@ -83,19 +90,21 @@ export const loginUser = catchAsyncErrors(
     }
 
     // login successful
-    sendToken(generateJwt(nic), 200, res);
+    sendToken(generateJwt(nic), 200, res, await getUserDetails(nic));
   }
 );
 
-export const logoutUser = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
-  res.cookie("token", null, {
-    expires: new Date(Date.now()),
-    httpOnly: true,
-    secure: true,
-  });
+export const logoutUser = catchAsyncErrors(
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+      secure: true,
+    });
 
-  res.status(200).json({
-    success: true,
-    message: "You have logged out",
-  });
-})
+    res.status(200).json({
+      success: true,
+      message: "You have logged out",
+    });
+  }
+);
