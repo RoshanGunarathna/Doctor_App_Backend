@@ -86,3 +86,16 @@ export const loginUser = catchAsyncErrors(
     sendToken(generateJwt(nic), 200, res);
   }
 );
+
+export const logoutUser = catchAsyncErrors(async (req: Request, res: Response, next: NextFunction) => {
+  res.cookie("token", null, {
+    expires: new Date(Date.now()),
+    httpOnly: true,
+    secure: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "You have logged out",
+  });
+})

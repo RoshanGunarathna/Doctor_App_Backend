@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import * as jwt from "jsonwebtoken";
+import { verify, JwtPayload, TokenExpiredError } from "jsonwebtoken";
 import ErrorHandler from "../utils/errorHandler";
 import { checkIfUserExists, getUserDetails } from "../Services/User";
 
@@ -16,10 +16,10 @@ export const isAuthenticatedUser = async (
   }
 
   try {
-    const decode = jwt.verify(
+    const decode = verify(
       token,
       process.env.JWT_SECRET as string
-    ) as jwt.JwtPayload;
+    ) as JwtPayload;
 
     const isValid = await checkIfUserExists(decode.nic, "nic");
 
@@ -30,8 +30,16 @@ export const isAuthenticatedUser = async (
 
     req.body.user = await getUserDetails(decode.nic);
   } catch (error) {
+    console.log(error);
     res.clearCookie("token", { path: "/" });
-    return next(new ErrorHandler("Invalid Token! Try again", 400));
+
+    if (error instanceof TokenExpiredError) {
+      return next(
+        new ErrorHandler("Token Expired Please Login and Try Again!", 400)
+      );
+    }
+
+    return next(new ErrorHandler("Something went to wrong", 500));
   }
 
   next();
