@@ -7,7 +7,8 @@ import bcrypt from "bcryptjs";
 export const addUser = async (userData: UserInput) => {
   try {
     const user = new UserEntity();
-    user.name = userData.name;
+    user.firstName = userData.firstName;
+    user.lastName = userData.lastName;
     user.phoneNumber = userData.phoneNumber;
     user.password = userData.password;
     user.nic = userData.nic;

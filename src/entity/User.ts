@@ -13,7 +13,12 @@ export class User {
   id: number;
 
   @Column()
-  name: string;
+  @Index("firstName_index")
+  firstName: string;
+
+  @Column()
+  @Index("lastName_index")
+  lastName: string;
 
   @Column()
   @Index("nic_index", { unique: true })

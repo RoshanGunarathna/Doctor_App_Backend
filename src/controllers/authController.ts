@@ -17,10 +17,10 @@ import { strict } from "assert";
 // Register a user  => /api/v1/register
 export const registerUser = catchAsyncErrors(
   async (req: Request, res: Response, next: NextFunction) => {
-    const { name, phoneNumber, password, nic } = req.body;
+    const { firstName, lastName, phoneNumber, password, nic } = req.body;
 
     // Check if any filed is empty
-    if (!name || !phoneNumber || !password || !nic) {
+    if (!firstName || !lastName || !phoneNumber || !password || !nic) {
       return next(new ErrorHandler("empty fields are not allowed!", 400));
     }
 
@@ -52,7 +52,8 @@ export const registerUser = catchAsyncErrors(
     }
 
     const result = await addUser({
-      name: name as string,
+      firstName: firstName as string,
+      lastName: lastName as string,
       password: hashedPassword as string,
       phoneNumber: phoneNumber as string,
       nic: nic as string,

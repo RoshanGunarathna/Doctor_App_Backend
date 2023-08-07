@@ -6,7 +6,8 @@ export type userRoles =
   | "admin";
 
 export interface UserInput {
-  name: string;
+  firstName: string;
+  lastName: string;
   phoneNumber: string;
   nic: string;
   password: string;
