@@ -78,3 +78,19 @@ export const getUserDetails = async (nic: string): Promise<UserEntity> => {
 
   return await userRepository.findOne({ where: { nic: nic } });
 };
+
+export const getAllUsers = async (): Promise<Array<UserEntity>> => {
+  const userRepository = AppDataSource.getRepository(UserEntity);
+
+  return await userRepository.find();
+};
+export const getAllAdmins = async (): Promise<Array<UserEntity>> => {
+  const userRepository = AppDataSource.getRepository(UserEntity);
+
+  return await userRepository.find({ where: { role: "admin" } });
+};
+export const getAllDoctors = async (): Promise<Array<UserEntity>> => {
+  const userRepository = AppDataSource.getRepository(UserEntity);
+
+  return await userRepository.find();
+};
